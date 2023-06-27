@@ -11,8 +11,8 @@
       <div class="flex flex-col mt-4 w-full">
         <label for="">Add todo:</label>
         <div class="w-full flex">
-        <input type="text" class="border-b-2 w-full p-1" v-model="todoInput" required>
-        <button class="hover:bg-green-800" :disabled="!todoInput">Add</button>
+        <input type="text" class="border-b-2 w-full p-1 outline-none" v-model="todoInput" required>
+        <button class="hover:bg-green-800" :disabled="!todoInput" :class="{disabled: !todoInput}">Add</button>
         </div>
       </div>
     <div v-if="todosArr.length">
@@ -51,12 +51,16 @@ const todosArr = ref([])
   const current = ref('all')
 
   const submitTodo = () => {
+    if(todoInput.value === '' || isDuplicate(todoInput.value)){
+      return
+    }
     todosArr.value.unshift({
       id: Math.random(),
       title: todoInput.value,
       detail: 'lorem ipsum...',
       isDone: false
     })
+    
     saveToLocalStorage()
     todoInput.value = ""
   }
@@ -122,6 +126,11 @@ current.value === 'completed'
       ? todosArr.value.filter((todo) => !todo.isDone)
       : todosArr.value
 )
+
+// prevent duplicate todo
+function isDuplicate(todoTitle) {
+  return todosArr.value.some((todo) => todo.title === todoTitle)
+}
 </script>
 
 <style scoped>
@@ -132,5 +141,7 @@ current.value === 'completed'
     color: #fff;
     border-radius: 10px;
   }
-  
+  .disabled {
+    background: #e8e8e8;
+  }
 </style>
