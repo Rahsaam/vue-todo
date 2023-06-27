@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script>
+<!-- <script>
 export default {
     props: ['current'],
     methods: {
@@ -27,6 +27,15 @@ export default {
         }
     }
 }
+</script> -->
+
+<script setup>
+    defineProps(['current'])
+    const emit = defineEmits([])
+
+    const updateFilter = (by) => {
+        emit('filterChange', by)
+    }
 </script>
 
 <style scoped>
