@@ -1,12 +1,14 @@
 <template>
   <div class="todo flex items-center justify-between" :class="{complete: todo.isDone}">
           <div>
-            <RouterLink :to="{name: 'todoDetail', params: {id: todo.id}, query: { name: todo.title, completed: todo.isDone }}" >
+            <RouterLink :to="{name: 'todoDetail', params: {id: todo.id}, query: { name: todo.title, completed: todo.isDone, detail: todo.detail }}" >
               <h1 class="font-bold text-xl cursor-pointer hover:font-extrabold inline-block">{{ todo.title }} </h1>
             </RouterLink>
-            <i class="fa-solid fa-chevron-down ml-3" v-if="!showDetail" @click="showDetail = !showDetail"></i>
-            <i class="fa-solid fa-chevron-up ml-3" v-else @click="showDetail = !showDetail"></i>
-            <p v-if="showDetail">{{ todo.detail }}</p>
+            <div v-if="todo.detail" class="inline-block">
+              <i class="fa-solid fa-chevron-down ml-3" v-if="!showDetail" @click="showDetail = !showDetail"></i>
+              <i class="fa-solid fa-chevron-up ml-3" v-else @click="showDetail = !showDetail"></i>
+            </div>
+            <p v-if="showDetail">{{ snipet }}</p>
           </div>
           <div class="space-x-4">
             <i class="fa-solid fa-trash cursor-pointer hover:text-gray-900" @click="$emit('delete')"></i>
@@ -17,10 +19,12 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { computed, ref } from "vue"
 
-defineProps(['todo'])
-
+const props = defineProps(['todo'])
+const snipet = computed(() => {
+  return props.todo.detail.substring(0,10) + '...'
+})
 const showDetail = ref(false)
 </script>
 

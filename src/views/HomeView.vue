@@ -15,6 +15,10 @@
         <button class="hover:bg-green-800" :disabled="!todoInput" :class="{disabled: !todoInput}">Add</button>
         </div>
       </div>
+      <div class="mt-5 flex flex-col">
+        <label class="" for="">Add detail:</label>
+        <textarea class="shadow-md p-1 rounded-lg outline-none mt-3" @keydown.enter="submitTodo" v-model="todoDetail"></textarea>
+      </div>
     <div v-if="todosArr.length">
     <div class="mt-10">
 
@@ -46,6 +50,7 @@ import todo from '../components/Todo.vue'
 import filterNav from '../components/FilteredNav.vue'
 const todoInput = ref("")
 const todosArr = ref([])
+const todoDetail = ref("")
 
   // constant for filter nav
   const current = ref('all')
@@ -57,12 +62,13 @@ const todosArr = ref([])
     todosArr.value.unshift({
       id: Math.random(),
       title: todoInput.value,
-      detail: 'lorem ipsum...',
+      detail: todoDetail.value,
       isDone: false
     })
     
     saveToLocalStorage()
     todoInput.value = ""
+    todoDetail.value = ''
   }
   // get items from LS to page
   onMounted(() => {
